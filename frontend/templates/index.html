@@ -1,0 +1,133 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="analytics-sparkle-area">
+        <div class="container-fluid">
+            <div class="row">
+                {% for habit in habit_list %}
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="analytics-sparkle-line reso-mg-b-30">
+                            <div class="analytics-content">
+                                <h5>{{ habit['name'] }}</h5>
+                                <h2>Level <span class="counter">{{ habit['level'] }}</span>
+                                </h2>
+                                <span class="text-success">{{ habit['level_progress'] }}%</span>
+                                <div class="progress m-b-0">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50"
+                                         aria-valuemin="0" aria-valuemax="100"
+                                         style="width:{{ habit['level_progress'] }}%;"><span
+                                            class="sr-only">{{ habit['level_progress'] }}% Complete</span></div>
+                                </div>
+                                <span><b>Important Information:</b> You can engage in this activity at most {{ habit['num_left'] }} more times today.</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <a href="{{ url_for('dash.add_habit') }}">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="analytics-sparkle-line reso-mg-b-30">
+                            <div class="analytics-content">
+                                <h5>Add New</h5>
+                                <h2>+<span class="tuition-fees">Click Here</span></h2>
+                                <span class="text-danger">100%</span>
+                                <div class="progress m-b-0">
+                                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50"
+                                         aria-valuemin="0" aria-valuemax="100" style="width:100%;"><span
+                                            class="sr-only">100% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="product-sales-area mg-tb-30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="product-sales-chart">
+                        <div class="portlet-title">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="caption pro-sl-hd">
+                                        <span class="caption-subject"><b>Activity Summary</b></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                </div>
+                            </div>
+                        </div>
+                        <canvas id="canvas" style="height: 356px;"></canvas>
+                        <script src="https://www.chartjs.org/dist/2.8.0/Chart.min.js"></script>
+                        <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+                        <script>
+                            var config = {
+                                type: 'line',
+                                data: {
+                                    labels: [{% for date in date_list %}"{{ date }}", {% endfor %}],
+                                    datasets: [
+                                        {% for habit in habit_list %}
+                                            {
+                                                label: "{{ habit['name'] }}",
+                                                backgroundColor: window.chartColors.red,
+                                                borderColor: getRandomColor(),
+                                                data: {{ habit['data'] }},
+                                                fill: false,
+                                            },
+                                        {% endfor %}
+                                    ]
+                                },
+                                options: {
+                                    responsive: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Weekly Tracking'
+                                    },
+                                    tooltips: {
+                                        mode: 'index',
+                                        intersect: false,
+                                    },
+                                    hover: {
+                                        mode: 'nearest',
+                                        intersect: true
+                                    },
+                                    scales: {
+                                        xAxes: [{
+                                            display: true,
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: 'Days'
+                                            }
+                                        }],
+                                        yAxes: [{
+                                            display: true,
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: 'Value'
+                                            }
+                                        }]
+                                    }
+                                }
+                            };
+
+                            window.onload = function () {
+                                var ctx = document.getElementById('canvas').getContext('2d');
+                                window.myLine = new Chart(ctx, config);
+                            };
+
+                            function getRandomColor() {
+                                var letters = '0123456789ABCDEF'.split('');
+                                var color = '#';
+                                for (var i = 0; i < 6; i++) {
+                                    color += letters[Math.floor(Math.random() * 16)];
+                                }
+                                return color;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

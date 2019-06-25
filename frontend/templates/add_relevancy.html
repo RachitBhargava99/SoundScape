@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="error-pagewrap">
+        <div class="error-page-int">
+            <div class="text-center m-b-md custom-login">
+                <h3>Add New Habit to Tackle</h3>
+                <p>This is the best app ever!</p>
+            </div>
+            <div class="content-error">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <form action="" id="loginForm" method="POST">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="control-label" for="username">How hard have you been trying to get rid of this habit?</label>
+                                {{ form.relevancy(class="form-control custom-select", placeholder="How hard have you been trying to get rid of this habit?") }}
+                                <span class="help-block small">The category that is closest to the entry</span>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block loginbtn">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <img src="../static/main/img/dog_normal.png" style="position: fixed; float: right; bottom: 1%; right: 1%;">
+{% endblock %}
